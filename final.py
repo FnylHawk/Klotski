@@ -6,12 +6,13 @@ def move_block_on_board(board, block, direction):
     # Find all positions of the block in the board string
     block_positions = [i for i, char in enumerate(board) if char == block]
     
-    # Define how to change index for each direction (N, S, W, E)
+    # Change index for each direction (N, S, E, W)
     direction_map = {
-        'N': -4,   # Move up by one row (4 positions back)
-        'S': 4,    # Move down by one row (4 positions forward)
-        'W': -1,   # Move left by one position
-        'E': 1     # Move right by one position
+        'N': -4,   
+        'S': 4,    
+        'E': 1,
+        'W': -1
+             
     }
     
     shift = direction_map[direction]
@@ -19,7 +20,11 @@ def move_block_on_board(board, block, direction):
     # Create a list of characters for board manipulation
     board_list = list(board)
     
-    # Move the block by shifting each position
+    for pos in block_positions:
+        board_list[pos] = '@'
+    
+    # Move the block to the new position
+    new_positions = []
     for pos in block_positions:
         new_pos = pos + shift
         
@@ -29,11 +34,13 @@ def move_block_on_board(board, block, direction):
         if direction == 'E' and (pos + 1) % 4 == 0:
             continue  # Can't move right from the last column
         
-        # Move the block to the new position
-        board_list[pos] = '@'  # Vacate the original position
+        new_positions.append(new_pos)
+
+    # Block's new positions
+    for new_pos in new_positions:
         if board_list[new_pos] == '@' or board_list[new_pos] < block:
-            board_list[new_pos] = block  # Place the block in the new position if it is greater or the spot is empty
-    
+            board_list[new_pos] = block
+
     return ''.join(board_list)
 
 def apply_moves(board_str, moves_str):
